@@ -22,13 +22,13 @@ pipeline {
    
 
                 
-                sh'''
+                sh"""
                 echo "${psw}" | docker login -u ${user} --password-stdin
 		            docker push ${user}/test:1.0
 		            docker image rm ${user}/test:1.0
 		
                 
-                '''
+                """
 			}
             }
         }
