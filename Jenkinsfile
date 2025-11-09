@@ -11,7 +11,7 @@ pipeline {
             steps{
                 sh'''
                 
-                docker build -t test:1.0 .
+                docker build -t charan027/test:1.0 .
                 
                 '''
             }
@@ -25,7 +25,7 @@ pipeline {
                 sh"""
                 echo "${psw}" | docker login -u ${user} --password-stdin
 		            docker push ${user}/test:1.0
-		            docker image rm test:1.0
+		            docker image rm ${user}/test:1.0
 		
                 
                 """
