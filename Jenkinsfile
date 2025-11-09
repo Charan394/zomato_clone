@@ -24,7 +24,7 @@ pipeline {
                 
                 sh"""
                 echo "${psw}" | docker login -u ${user} --password-stdin
-		            docker push test:1.0
+		            docker push ${user}/test:1.0
 		            docker image rm test:1.0
 		
                 
