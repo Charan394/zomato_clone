@@ -32,6 +32,24 @@ pipeline {
 			}
             }
         }
+
+        stage("Deploy to EKS") {
+            steps {
+                script {
+                    echo "Deploying to EKS cluster..."
+                    
+                  
+                    //    This works because the slave has the 'Jenkins-EKS-Role'
+                    sh "aws eks update-kubeconfig --name zomato-cluster --region us-east-1"
+                    
+                    // 2. Apply the new configuration from our k8s folder
+                    //    This will update the deployment with the new image
+                    sh "kubectl apply -f k8s/"
+                    
+                    echo "Deployment complete."
+                }
+            }
+        }
     }
 
 	post{
