@@ -46,7 +46,7 @@ pipeline {
                     
                     // 2. Apply the new configuration from our k8s folder
                     //    This will update the deployment with the new image
-                    sh "kubectl apply -f k8s/"
+                    sh "kubectl apply -f k8/"
                     
                     echo "Deployment complete."
                 }
