@@ -1,1 +1,116 @@
 
+
+  
+
+## 📖 Project Overview
+
+This project demonstrates a comprehensive **DevOps CI/CD pipeline** for deploying a containerized "Zomato Clone" web application. The infrastructure leverages **AWS EKS (Elastic Kubernetes Service)** for orchestration, **Jenkins** for continuous integration and deployment, and a full monitoring stack using **Prometheus and Grafana**.
+
+## 🚀 Architecture & Tech Stack
+
+The project follows a modern cloud-native approach:
+
+  * **Version Control:** GitHub
+  * **CI/CD Engine:** Jenkins (Declarative Pipeline)
+  * **Containerization:** Docker & Docker Hub
+  * **Orchestration:** AWS EKS (Kubernetes version 1.32)
+  * **Infrastructure:** AWS EC2 (t3.small instances)
+  * **Monitoring:** Prometheus (Data scraping) & Grafana (Visualization)
+  * **Web Server:** Nginx
+
+-----
+
+## 🛠️ Pipeline Workflow
+
+The automated pipeline is triggered via a **GitHub Webhook** upon every push to the repository. The Jenkins pipeline consists of the following stages:
+
+1.  **Checkout SCM:** Fetches the latest source code from the GitHub repository.
+2.  **Building the Image:** Builds a Docker image of the application.
+3.  **Pushing the Image:** Pushes the built image to the Docker Hub repository (`charan027/test`).
+4.  **Deploy to EKS:** Updates the Kubernetes deployment on the AWS EKS cluster using `kubectl`.
+5.  **Post Actions:** Handles cleanup and notifications.
+
+-----
+
+## ⚙️ Infrastructure Setup
+
+### 1\. AWS EKS Cluster
+
+The cluster, named `zomato-cluster`, is provisioned using `eksctl` in the `us-east-1` region.
+
+**Cluster Configuration:**
+
+  * **Nodes:** 2 Managed Worker Nodes
+  * **Instance Type:** `t3.small`
+  * **Region:** us-east-1
+
+**Provisioning Command:**
+
+```bash
+eksctl create cluster --name zomato-cluster \
+--region us-east-1 \
+--nodegroup-name zomato-workers \
+--node-type t3.small \
+--nodes 2
+```
+
+### 2\. Jenkins Server
+
+The Jenkins master server runs on a standalone EC2 instance. It utilizes a separate slave node agent to distribute build workloads efficiently.
+
+-----
+
+## 📊 Monitoring & Observability
+
+The application and infrastructure are monitored to ensure high availability and performance.
+
+### Prometheus
+
+Prometheus is configured to scrape metrics every 15 seconds from three primary targets:
+
+  * **Prometheus:** Self-monitoring (`localhost:9090`).
+  * **Jenkins:** CI/CD server metrics.
+  * **EKS Nodes:** Worker node metrics via **Node Exporter** (exposed on port `30002`).
+
+### Grafana
+
+A Grafana dashboard is connected to the Prometheus data source to visualize:
+
+  * CPU Usage (Busy/Idle)
+  * Memory/RAM Usage
+  * System Load
+  * Network Traffic
+
+-----
+
+## 📦 Deployment Details
+
+The application is exposed using standard Kubernetes objects:
+
+  * **Deployment:** Manages the pods (replicas) of the Zomato application.
+  * **Service:** A `NodePort` service (Port `30001`) exposes the application externally.
+  * **DaemonSet:** Deploys `node-exporter` on every worker node for monitoring.
+
+**Accessing the App:**
+
+```text
+http://<WORKER-NODE-PUBLIC-IP>:30001
+```
+
+-----
+
+## 🔧 Prerequisites to Run Locally
+
+To replicate this project, ensure you have the following installed:
+
+1.  **AWS CLI** (Configured with appropriate IAM permissions).
+2.  **kubectl** (For interacting with the cluster).
+3.  **eksctl** (For creating the cluster).
+4.  **Docker** (For local image building).
+
+## 👤 Author
+
+**Charan Gowda R.**
+
+  * [GitHub Profile](https://www.google.com/search?q=https://github.com/Charan394)
+  * [Docker Hub](https://www.google.com/search?q=https://hub.docker.com/u/charan027)
